@@ -2,14 +2,16 @@ import sqlite3
 import sys
 from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QPushButton
+from UI_main import Ui_MainWindow
+from UI_addEditCoffeeForm import Ui_NewWindow
 
 
 # tableWidget
 
-class MyWidiget(QMainWindow):
+class MyWidiget(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('main.ui', self)
+        self.setupUi(self)
         self.pushButton.clicked.connect(self.run_btn)
         self.pushButton_2.clicked.connect(self.new_form)
 
@@ -28,7 +30,7 @@ class MyWidiget(QMainWindow):
 
         title = ['ID', 'название сорта', 'степень обжарки', 'молотый/в зернах', 'описание вкуса', 'цена',
                  'объем упаковки']
-        con = sqlite3.connect('coffee.sqlite')
+        con = sqlite3.connect('data/coffee.sqlite')
         cur = con.cursor()
         res = list(map(dop_connect, cur.execute('''SELECT * FROM coffee''').fetchall()))
         self.tableWidget.setColumnCount(len(title))
@@ -41,11 +43,11 @@ class MyWidiget(QMainWindow):
         con.close()
 
 
-class NewForm(QMainWindow):
+class NewForm(QMainWindow, Ui_NewWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi("addEditCoffeeForm.ui", self)
-        self.con = sqlite3.connect("coffee.sqlite")
+        self.setupUi(self)
+        self.con = sqlite3.connect("data/coffee.sqlite")
         self.pushButton11.clicked.connect(self.get_result)
         self.pushButton12.clicked.connect(self.save_results)
         self.pushButton_zap.clicked.connect(self.append_new_res)
